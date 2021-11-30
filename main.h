@@ -14,6 +14,12 @@ enum COLOR
 	PURPLE
 };
 
+struct SHAPE
+{
+	const char t;
+	enum COLOR c;
+};
+
 struct POSITION
 {
 	int x;
@@ -43,6 +49,12 @@ struct TRIANGLE
 	struct POSITION a1;
 	struct POSITION a2;
 	struct POSITION a3;
+};
+
+struct SHAPE_SQUARE_PAIR
+{
+	struct SHAPE* s;
+	double d;
 };
 
 typedef struct CIRCLE Circle;

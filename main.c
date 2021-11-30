@@ -2,18 +2,29 @@
 #include <stdio.h>
 #include <main.h>
 #include <string.h>
+#include <math.h>
 
 double GetSquare_CIRCLE (struct CIRCLE s)
 {
-
+	return 3.14159265359f * s.radius* s.radius;
 }
 double GetSquare_RECTANGLE (struct RECTANGLE s)
 {
-
+	return ((long long int)(s.a1.x - s.a2.x) * (s.a1.y - s.a2.y)) ^ (long long int)(-1) ; 
 }
+
+double GetLength(int x1, int y1, int x2, int y2)
+{
+	return sqrt( (x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2) );
+}
+
 double GetSquare_TRIANGLE (struct TRIANGLE s)
 {
-
+	double a = GetLength(s.a1.x, s.a1.y, s.a2.x, s.a2.y);
+	double b = GetLength(s.a2.x, s.a2.y, s.a3.x, s.a3.y);
+	double c = GetLength(s.a1.x, s.a1.y, s.a3.x, s.a3.y);
+	int p =  (a + b + c) / 2;
+	return sqrt(p * (p - a) * (p - b) * (p -c ) );
 }
 
 Circle* new_CIRCLE(struct POSITION p, uint radius, enum COLOR c)
@@ -25,11 +36,17 @@ Circle* new_CIRCLE(struct POSITION p, uint radius, enum COLOR c)
 }
 Rect* new_RECTANGLE(struct POSITION p, struct POSITION p2, enum COLOR c)
 {
-
+	Rect s = {'r', c, p, p2};
+	Rect* ret = malloc(sizeof(s));
+	memcpy(ret, &s, sizeof(s));
+	return ret;
 }
 Trian* new_TRIANGLE(struct POSITION p, struct POSITION p2, struct POSITION p3, enum COLOR c)
 {
-
+	Trian s = {'t', c, p, p2, p3};
+	Trian* ret = malloc(sizeof(s));
+	memcpy(ret, &s, sizeof(s));
+	return ret;
 }
 
 int main (int argc, char* argv[])
@@ -39,7 +56,7 @@ int main (int argc, char* argv[])
 	FILE* fin= fopen(argv[1], "r");
 	FILE* fout= fopen(argv[2], "w");
 	int elemcount = 0;
-	while (feof(fin))
+	while (!feof(fin))
 	{
 		char c = 0;
 		fscanf(fin, "%c", &c);
@@ -48,11 +65,12 @@ int main (int argc, char* argv[])
 	}
 	rewind(fin);
 	void** elems = malloc(sizeof(void*)*elemcount);
+	struct SHAPE_SQUARE_PAIR* squares = malloc(sizeof(struct SHAPE_SQUARE_PAIR)*elemcount);
 	uint i = 0;
-	while (feof(fin))
+	while (!feof(fin))
 	{
 		char c = 0;
-		fscanf(fin, "%c", &c);
+		fscanf(fin, " %c ", &c);
 		switch (c)
 		{
 			case 'c':
@@ -91,17 +109,37 @@ int main (int argc, char* argv[])
 				
 				break;
 			default:
-			printf("undefined symbol \'%c\'\n", c);
+			printf("undefined symbol \'%c\'\t at %ld\n", c, ftell(fin));
 		}
 		if (c == 'c' || c == 'r' || c == 't')
 			i++;
 	}
-	printf("READ\n");
+	printf("READ finished: %d objects\n", elemcount);
 	for (uint i = 0; i < elemcount; i++)
 	{
-		printf ("%c %d ", ((struct TRIANGLE*)elems[i])->t, ((struct TRIANGLE*)elems[i])->c);
+		printf ("%c %d \t", ((struct SHAPE*)elems[i])->t, ((struct SHAPE*)elems[i])->c);
+		squares[i].s = elems[i];
+		switch (((struct SHAPE*)elems[i])->t)
+		{
+		case 'c':
+			squares[i].d = GetSquare_CIRCLE(*(Circle*)elems[i]);
+			printf("%lf\n", GetSquare_CIRCLE(*(Circle*)elems[i]) );
+			break;
+		case 't':
+			squares[i].d = GetSquare_TRIANGLE(*(Trian*)elems[i]);
+			printf("%lf\n", GetSquare_TRIANGLE(*(Trian*)elems[i]) );
+			break;
+		case 'r':
+			squares[i].d = GetSquare_RECTANGLE(*(Rect*)elems[i]);
+			printf("%lf\n", GetSquare_RECTANGLE(*(Rect*)elems[i]) );
+			break;
+		}
 	}
-
+	for (uint i =0; i < elemcount; i++)
+	{
+		free(elems[i]);
+	}
+	free(squares);
 	free(elems);
 	return 0;
 }
