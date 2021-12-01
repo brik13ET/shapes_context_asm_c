@@ -680,6 +680,76 @@ BinarySearch:
 	.cfi_endproc
 .LFE64:
 	.size	BinarySearch, .-BinarySearch
+	.globl	sort
+	.type	sort, @function
+sort:
+.LFB65:
+	.cfi_startproc
+	cmp	esi, 1
+	jle	.L68
+	push	r14
+	.cfi_def_cfa_offset 16
+	.cfi_offset 14, -16
+	push	r13
+	.cfi_def_cfa_offset 24
+	.cfi_offset 13, -24
+	push	r12
+	.cfi_def_cfa_offset 32
+	.cfi_offset 12, -32
+	push	rbp
+	.cfi_def_cfa_offset 40
+	.cfi_offset 6, -40
+	push	rbx
+	.cfi_def_cfa_offset 48
+	.cfi_offset 3, -48
+	mov	rbp, rdi
+	lea	r14d, -2[rsi]
+	add	r14, 1
+	mov	r12d, 0
+.L64:
+	mov	ebx, r12d
+	mov	r13, QWORD PTR 8[rbp+r12*8]
+	mov	ecx, r12d
+	mov	edx, 0
+	mov	rsi, r13
+	mov	rdi, rbp
+	call	BinarySearch
+	cmp	r12d, eax
+	jl	.L62
+.L63:
+	movsx	rdx, ebx
+	mov	rcx, QWORD PTR 0[rbp+rdx*8]
+	mov	QWORD PTR 8[rbp+rdx*8], rcx
+	sub	ebx, 1
+	cmp	eax, ebx
+	jle	.L63
+.L62:
+	movsx	rbx, ebx
+	mov	QWORD PTR 8[rbp+rbx*8], r13
+	add	r12, 1
+	cmp	r12, r14
+	jne	.L64
+	pop	rbx
+	.cfi_def_cfa_offset 40
+	pop	rbp
+	.cfi_def_cfa_offset 32
+	pop	r12
+	.cfi_def_cfa_offset 24
+	pop	r13
+	.cfi_def_cfa_offset 16
+	pop	r14
+	.cfi_def_cfa_offset 8
+	ret
+.L68:
+	.cfi_restore 3
+	.cfi_restore 6
+	.cfi_restore 12
+	.cfi_restore 13
+	.cfi_restore 14
+	rep ret
+	.cfi_endproc
+.LFE65:
+	.size	sort, .-sort
 	.section	.rodata.str1.1
 .LC6:
 	.string	"r"
@@ -716,7 +786,7 @@ BinarySearch:
 	.globl	main
 	.type	main, @function
 main:
-.LFB65:
+.LFB66:
 	.cfi_startproc
 	push	r15
 	.cfi_def_cfa_offset 16
@@ -742,7 +812,7 @@ main:
 	mov	QWORD PTR 24[rsp], rax
 	xor	eax, eax
 	cmp	edi, 1
-	jle	.L85
+	jle	.L96
 	mov	rbp, rsi
 	mov	rdi, QWORD PTR 8[rsi]
 	lea	rsi, .LC6[rip]
@@ -754,14 +824,14 @@ main:
 	mov	QWORD PTR 8[rsp], rax
 	mov	ebp, 0
 	lea	r12, 23[rsp]
-	jmp	.L62
-.L86:
+	jmp	.L73
+.L97:
 	add	ebp, 1
-.L62:
+.L73:
 	mov	rdi, rbx
 	call	feof@PLT
 	test	eax, eax
-	jne	.L93
+	jne	.L104
 	mov	BYTE PTR 23[rsp], 0
 	mov	rdx, r12
 	lea	rsi, .LC8[rip]
@@ -771,11 +841,11 @@ main:
 	movzx	eax, BYTE PTR 23[rsp]
 	lea	edx, -114[rax]
 	test	dl, -3
-	je	.L86
+	je	.L97
 	cmp	al, 99
-	je	.L86
-	jmp	.L62
-.L93:
+	je	.L97
+	jmp	.L73
+.L104:
 	mov	rdi, rbx
 	call	rewind@PLT
 	movsx	rdi, ebp
@@ -784,8 +854,8 @@ main:
 	mov	r13, rax
 	mov	r12d, 0
 	lea	r14, 23[rsp]
-	jmp	.L66
-.L95:
+	jmp	.L77
+.L106:
 	mov	eax, r12d
 	lea	r15, 0[r13+rax*8]
 	mov	edx, 0
@@ -801,20 +871,20 @@ main:
 	mov	rdi, rbx
 	mov	eax, 0
 	call	__isoc99_fscanf@PLT
-.L71:
+.L82:
 	movzx	eax, BYTE PTR 23[rsp]
 	lea	edx, -114[rax]
 	test	dl, -3
-	je	.L87
+	je	.L98
 	cmp	al, 99
-	jne	.L66
-.L87:
+	jne	.L77
+.L98:
 	add	r12d, 1
-.L66:
+.L77:
 	mov	rdi, rbx
 	call	feof@PLT
 	test	eax, eax
-	jne	.L94
+	jne	.L105
 	mov	BYTE PTR 23[rsp], 0
 	mov	rdx, r14
 	lea	rsi, .LC9[rip]
@@ -823,11 +893,11 @@ main:
 	call	__isoc99_fscanf@PLT
 	movzx	eax, BYTE PTR 23[rsp]
 	cmp	al, 114
-	je	.L68
+	je	.L79
 	cmp	al, 116
-	je	.L69
+	je	.L80
 	cmp	al, 99
-	je	.L95
+	je	.L106
 	mov	rdi, rbx
 	call	ftell@PLT
 	movsx	edx, BYTE PTR 23[rsp]
@@ -836,8 +906,8 @@ main:
 	mov	edi, 1
 	mov	eax, 0
 	call	__printf_chk@PLT
-	jmp	.L71
-.L68:
+	jmp	.L82
+.L79:
 	mov	eax, r12d
 	lea	r15, 0[r13+rax*8]
 	mov	edx, 0
@@ -860,8 +930,8 @@ main:
 	call	__isoc99_fscanf@PLT
 	add	rsp, 16
 	.cfi_def_cfa_offset 96
-	jmp	.L71
-.L69:
+	jmp	.L82
+.L80:
 	mov	eax, r12d
 	lea	r15, 0[r13+rax*8]
 	mov	ecx, 0
@@ -891,8 +961,8 @@ main:
 	call	__isoc99_fscanf@PLT
 	add	rsp, 32
 	.cfi_def_cfa_offset 96
-	jmp	.L71
-.L94:
+	jmp	.L82
+.L105:
 	mov	edx, ebp
 	lea	rsi, .LC14[rip]
 	mov	edi, 1
@@ -900,18 +970,18 @@ main:
 	call	__printf_chk@PLT
 	mov	esi, ebp
 	mov	rdi, r13
-	call	sort@PLT
+	call	sort
 	lea	rdi, .LC15[rip]
 	call	puts@PLT
 	test	ebp, ebp
-	je	.L75
+	je	.L86
 	mov	r12, r13
 	lea	eax, -1[rbp]
 	lea	r15, 8[r13+rax*8]
 	mov	rbp, r13
 	lea	r14, .LC16[rip]
-	jmp	.L80
-.L97:
+	jmp	.L91
+.L108:
 	mov	ecx, DWORD PTR 8[rax]
 	sub	rsp, 8
 	.cfi_def_cfa_offset 104
@@ -927,11 +997,11 @@ main:
 	call	__fprintf_chk@PLT
 	add	rsp, 16
 	.cfi_def_cfa_offset 96
-.L76:
+.L87:
 	add	rbp, 8
 	cmp	rbp, r15
-	je	.L96
-.L80:
+	je	.L107
+.L91:
 	mov	rdi, QWORD PTR 0[rbp]
 	call	GetSquare
 	mov	rax, QWORD PTR 0[rbp]
@@ -944,13 +1014,13 @@ main:
 	mov	rax, QWORD PTR 0[rbp]
 	movzx	edx, BYTE PTR [rax]
 	cmp	dl, 114
-	je	.L77
+	je	.L88
 	cmp	dl, 116
-	je	.L78
+	je	.L89
 	cmp	dl, 99
-	jne	.L76
-	jmp	.L97
-.L78:
+	jne	.L87
+	jmp	.L108
+.L89:
 	mov	ecx, DWORD PTR 8[rax]
 	mov	edx, DWORD PTR 4[rax]
 	push	rdx
@@ -973,8 +1043,8 @@ main:
 	call	__fprintf_chk@PLT
 	add	rsp, 32
 	.cfi_def_cfa_offset 96
-	jmp	.L76
-.L77:
+	jmp	.L87
+.L88:
 	mov	ecx, DWORD PTR 8[rax]
 	mov	edx, DWORD PTR 4[rax]
 	push	rdx
@@ -991,11 +1061,11 @@ main:
 	call	__fprintf_chk@PLT
 	add	rsp, 16
 	.cfi_def_cfa_offset 96
-	jmp	.L76
-.L85:
-	mov	eax, -1
-	jmp	.L60
+	jmp	.L87
 .L96:
+	mov	eax, -1
+	jmp	.L71
+.L107:
 	lea	rsi, .LC18[rip]
 	mov	edi, 1
 	mov	eax, 0
@@ -1006,22 +1076,22 @@ main:
 	call	fclose@PLT
 	lea	rdi, .LC19[rip]
 	call	puts@PLT
-.L82:
+.L93:
 	mov	rdi, QWORD PTR [r12]
 	call	free@PLT
 	add	r12, 8
 	cmp	r12, rbp
-	jne	.L82
-.L83:
+	jne	.L93
+.L94:
 	lea	rdi, .LC17[rip]
 	call	puts@PLT
 	mov	rdi, r13
 	call	free@PLT
 	mov	eax, 0
-.L60:
+.L71:
 	mov	rbx, QWORD PTR 24[rsp]
 	xor	rbx, QWORD PTR fs:40
-	jne	.L98
+	jne	.L109
 	add	rsp, 40
 	.cfi_remember_state
 	.cfi_def_cfa_offset 56
@@ -1038,7 +1108,7 @@ main:
 	pop	r15
 	.cfi_def_cfa_offset 8
 	ret
-.L75:
+.L86:
 	.cfi_restore_state
 	lea	rsi, .LC18[rip]
 	mov	edi, 1
@@ -1050,11 +1120,11 @@ main:
 	call	fclose@PLT
 	lea	rdi, .LC19[rip]
 	call	puts@PLT
-	jmp	.L83
-.L98:
+	jmp	.L94
+.L109:
 	call	__stack_chk_fail@PLT
 	.cfi_endproc
-.LFE65:
+.LFE66:
 	.size	main, .-main
 	.section	.rodata.cst4,"aM",@progbits,4
 	.align 4
