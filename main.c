@@ -122,7 +122,7 @@ int BinarySearch(struct SHAPE** a, struct SHAPE* item, int low, int high)
         return BinarySearch(a, item, mid + 1, high);
     return BinarySearch(a, item, low, mid - 1);
 }
-
+/*
 void sort(struct SHAPE** a, int n)
 {
     int i, loc, j;
@@ -143,7 +143,7 @@ void sort(struct SHAPE** a, int n)
 	a[j + 1] = selected;
     }
 }
-
+*/
 int main (int argc, char* argv[])
 {
 	if (argc <= 1)
