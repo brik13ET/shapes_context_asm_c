@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <main.h>
+#include "main.h"
 #include <string.h>
 #include <math.h>
 
@@ -51,14 +51,14 @@ Trian* new_TRIANGLE(struct POSITION p, struct POSITION p2, struct POSITION p3, e
 
 char* toString_CIRCLE(Circle* s)
 {
-	Circle* a = malloc(34);
+	char* a = malloc(34);
 	snprintf(a, 34, "c %d %d %d %hhd\n", s->a1.x, s->a1.y, s->radius, s->c);
 	return a;
 }
 
 char* toString_RECTANGLE(Rect* s)
 {
-	Rect* a = malloc(34);
+	char* a = malloc(34);
 	snprintf(a, 34, "r %d %d %d %d %hhd\n", 
 	s->a1.x, s->a1.y,
 	s->a2.x, s->a2.y,
@@ -68,7 +68,7 @@ char* toString_RECTANGLE(Rect* s)
 
 char* toString_TRIANGLE(Trian* s)
 {
-	Trian* a = malloc(34);
+	char* a = malloc(34);
 	snprintf(a, 34, "t %d %d %d %d %d %d %hhd\n", 
 	s->a1.x, s->a1.y,
 	s->a2.x, s->a2.y,
@@ -199,6 +199,7 @@ int main (int argc, char* argv[])
 
 	sort((struct SHAPE **)elems, elemcount);
 
+	printf("SORT finished\n");
 	for (uint i = 0; i < elemcount; i++)
 	{
 		printf ("%c %d %lf\n", ((struct SHAPE*)elems[i])->t, ((struct SHAPE*)elems[i])->c, GetSquare(elems[i] ) );
@@ -225,8 +226,10 @@ int main (int argc, char* argv[])
 			break;
 		}
 	}
+	printf("SAVING..");
 	fclose(fin);
 	fclose(fout);
+	printf("OK\n");
 	// cleanup. WTF IF FUCKING WRONG ???
 	for (uint i =0; i < elemcount; i++)
 	{

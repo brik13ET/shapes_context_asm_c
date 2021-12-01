@@ -8,4 +8,4 @@ AS=nasm
 	nasm -f elf64 $? -o $@
 
 all: main.c.o main.s.o
-	gcc main.c.o main.s.o -lm -o main  -ggdb
+	gcc main.c.o main.s.o -O1 -lm -o main  -ggdb

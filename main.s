@@ -94,7 +94,7 @@ extern BinarySearch
 sort:
 	enter
 ; int i = dword [rbp], loc = dword [rbp+4], j = dword [rbp+8]
-; struct SHAPE* s = qword [rbp+12]
+; struct SHAPE* selected = qword [rbp+12]
 ; args:
 ; struct SHAPE** a = rdi
 ; int n = rsi
@@ -102,7 +102,7 @@ sort:
 	sub	rsp,	12
 	sub	rsp,	8
 	mov	[rbp],	dword 1
-.for:	cmp	[rbp],	rdi
+.for:	cmp	[rbp],	rsi
 	jnl	.endfor
 	inc	dword [rbp]
 
